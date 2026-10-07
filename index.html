@@ -211,5 +211,192 @@
   </footer>
 
 </div>
+<!-- EXPORT-LONG-IMG BEGIN -->
+<style>
+.export-ui{position:fixed;right:18px;bottom:18px;z-index:9999;font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;text-align:right}
+.xbtn{padding:9px 16px;background:#f4f1e9;color:#1d1b16;border:1px solid #2a2721;box-shadow:2px 2px 0 #2a2721;font-size:13px;letter-spacing:.15em;cursor:pointer}
+.xbtn:hover{background:#ece8dd}
+.xpanel{display:none;margin-bottom:8px;width:250px;background:#f4f1e9;border:1px solid #2a2721;box-shadow:2px 2px 0 #2a2721;padding:14px 16px;font-size:12.5px;color:#4c473c;line-height:2;text-align:left}
+.xpanel.open{display:block}
+.xpanel h5{font-size:13px;letter-spacing:.25em;margin-bottom:4px;color:#1d1b16}
+.xpanel label{display:block;cursor:pointer;white-space:nowrap}
+.xpanel input{vertical-align:-1px}
+.xgo{width:100%;margin-top:8px;padding:7px 0;background:#b03a2e;color:#f4f1e9;border:1px solid #2a2721;cursor:pointer;font-size:13px;letter-spacing:.25em}
+.xgo:disabled{opacity:.5;cursor:default}
+.xbar{height:6px;border:1px solid #2a2721;margin-top:10px;display:none}
+.xbar i{display:block;height:100%;width:0;background:#b03a2e}
+.xmsg{margin-top:6px;font-size:11.5px;min-height:1.2em;word-break:break-all}
+@media (prefers-color-scheme:dark){.xbtn,.xpanel{background:#1e1d24;color:#e8e4d8;border-color:#d8d3c4;box-shadow:2px 2px 0 #000}.xpanel h5{color:#e8e4d8}.xgo{background:#d4604f;color:#16151a}.xbar{border-color:#d8d3c4}.xbar i{background:#d4604f}}
+@media print{.export-ui{display:none}}
+</style>
+<div class="export-ui" data-export-ignore>
+  <div class="xpanel" id="xpanel">
+    <h5>导出长图</h5>
+    <label><input type="radio" name="xscale" value="2"> 高清 2× · 宽 2552px</label>
+    <label><input type="radio" name="xscale" value="3" checked> 超清 3× · 宽 3828px</label>
+    <label><input type="radio" name="xscale" value="4"> 极限 4× · 宽 5104px</label>
+    <button class="xgo" id="xgo">开始导出</button>
+    <div class="xbar" id="xbar"><i></i></div>
+    <div class="xmsg" id="xmsg"></div>
+  </div>
+  <button class="xbtn" id="xtoggle">⤓ 导出长图</button>
+</div>
+<script>
+(function(){
+"use strict";
+var EXPORT_W=1276;          /* 排版宽度：1240 栏宽 + 左右各 18px 页边 */
+var TILE_PX=2048;           /* 单片画布最大像素高（控制内存峰值） */
+var PAPER="#f4f1e9";
+var LIGHT=":root{--paper:#f4f1e9;--paper2:#ece8dd;--ink:#1d1b16;--ink2:#4c473c;--ink3:#8d8674;--rule:#c9c3b2;--rule-dark:#2a2721;--accent:#b03a2e;--accent-soft:#c05a4e;}html{overflow:hidden}";
+var panel=document.getElementById("xpanel"),bar=document.getElementById("xbar"),
+    barI=bar.querySelector("i"),msg=document.getElementById("xmsg"),
+    go=document.getElementById("xgo"),running=false;
+
+document.getElementById("xtoggle").addEventListener("click",function(){panel.classList.toggle("open");});
+go.addEventListener("click",function(){
+  if(running)return;
+  var s=parseInt(panel.querySelector("input[name=xscale]:checked").value,10);
+  exportLongImage(s);
+});
+
+function setMsg(t){msg.textContent=t;}
+function setBar(p){bar.style.display="block";barI.style.width=Math.round(p*100)+"%";}
+
+function buildXHTML(){
+  var root=document.documentElement.cloneNode(true);
+  root.setAttribute("xmlns","http://www.w3.org/1999/xhtml");
+  Array.prototype.forEach.call(root.querySelectorAll("[data-export-ignore],script"),function(n){n.parentNode.removeChild(n);});
+  var st=document.createElement("style");st.textContent=LIGHT;   /* 长图固定为浅色纸张版 */
+  root.querySelector("head").appendChild(st);
+  return new XMLSerializer().serializeToString(root);
+}
+
+function measure(xhtml){
+  return new Promise(function(res,rej){
+    var f=document.createElement("iframe");
+    f.style.cssText="position:fixed;left:-100000px;top:0;width:"+EXPORT_W+"px;height:1000px;border:0;visibility:hidden;";
+    document.body.appendChild(f);
+    f.onload=function(){
+      var done=function(){res({frame:f,h:f.contentDocument.documentElement.scrollHeight});};
+      try{(f.contentDocument.fonts?f.contentDocument.fonts.ready:Promise.resolve()).then(function(){setTimeout(done,150);});}
+      catch(e){setTimeout(done,150);}
+    };
+    f.onerror=rej;
+    f.contentDocument.open();f.contentDocument.write(xhtml);f.contentDocument.close();
+  });
+}
+
+function tileSVG(xhtml,th,offY,pw,ph){
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+pw+'" height="'+ph+'" viewBox="0 0 '+EXPORT_W+' '+th+'">'
+    +'<foreignObject x="0" y="0" width="'+EXPORT_W+'" height="'+th+'">'
+    +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+EXPORT_W+'px;height:'+th+'px;overflow:hidden;">'
+    +'<div style="margin-top:-'+offY+'px;">'
+    +xhtml
+    +'</div></div></foreignObject></svg>';
+}
+
+function rasterTile(xhtml,th,offY,scale){
+  var pw=EXPORT_W*scale, ph=th*scale;
+  return new Promise(function(res,rej){
+    var img=new Image();
+    img.onload=function(){
+      var c=document.createElement("canvas");c.width=pw;c.height=ph;
+      var ctx=c.getContext("2d");
+      ctx.fillStyle=PAPER;ctx.fillRect(0,0,pw,ph);
+      ctx.drawImage(img,0,0,pw,ph);
+      res({canvas:c,ctx:ctx,pw:pw,ph:ph});
+    };
+    img.onerror=function(){rej(new Error("SVG 分片渲染失败"));};
+    img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(tileSVG(xhtml,th,offY,pw,ph));
+  });
+}
+
+/* ── PNG 流式编码（突破单画布像素上限，可输出任意长度长图） ── */
+var CRC_T=(function(){var t=new Uint32Array(256),i,j,c;for(i=0;i<256;i++){c=i;for(j=0;j<8;j++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[i]=c>>>0;}return t;})();
+function crc32(b){var c=4294967295,i;for(i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^4294967295)>>>0;}
+function chunk(type,data){
+  var out=new Uint8Array(12+data.length),dv=new DataView(out.buffer),i;
+  dv.setUint32(0,data.length);
+  for(i=0;i<4;i++)out[4+i]=type.charCodeAt(i);
+  out.set(data,8);
+  dv.setUint32(8+data.length,crc32(out.subarray(4,8+data.length)));
+  return out;
+}
+function pngHead(pw,ph){
+  var ihdr=new Uint8Array(13),dv=new DataView(ihdr.buffer);
+  dv.setUint32(0,pw);dv.setUint32(4,ph);ihdr[8]=8;ihdr[9]=6;
+  return [new Uint8Array([137,80,78,71,13,10,26,10]),chunk("IHDR",ihdr)];
+}
+
+async function exportLongImage(scale){
+  running=true;go.disabled=true;setBar(0);
+  try{
+    setMsg("正在测量版面…");
+    var xhtml=buildXHTML();
+    var m=await measure(xhtml);
+    var H=m.h+16;                       /* 底部留 16px 余量防裁切 */
+    document.body.removeChild(m.frame);
+    var pw=EXPORT_W*scale, phTotal=H*scale;
+    var thCss=Math.floor(TILE_PX/scale), totalTiles=Math.ceil(H/thCss);
+    setMsg("目标 "+pw+"×"+phTotal+" px · 共 "+totalTiles+" 个分片");
+    var streaming=!!window.CompressionStream;
+    var parts=null,writer=null,reading=null;
+    if(streaming){
+      parts=pngHead(pw,phTotal);
+      var cs=new CompressionStream("deflate");
+      writer=cs.writable.getWriter();
+      var reader=cs.readable.getReader();
+      reading=(async function(){for(;;){var r=await reader.read();if(r.done)break;parts.push(chunk("IDAT",r.value));}})();
+    }
+    var off=0,done=0;
+    while(off<H){
+      var th=Math.min(thCss,H-off);
+      var t=await rasterTile(xhtml,th,off,scale);
+      if(streaming){
+        var raw=t.ctx.getImageData(0,0,t.pw,t.ph).data;
+        var rowB=t.pw*4, out=new Uint8Array(raw.length+t.ph), y;
+        for(y=0;y<t.ph;y++)out.set(raw.subarray(y*rowB,(y+1)*rowB),y*(rowB+1)+1);
+        await writer.write(out);
+        t.canvas.width=0;               /* 立即释放画布内存 */
+      }else{
+        var blob=await new Promise(function(r){t.canvas.toBlob(r,"image/png");});
+        saveBlob(blob,fileName(t.pw,t.ph,done+1,totalTiles));
+      }
+      off+=th;done++;setBar(done/totalTiles);
+      setMsg("渲染分片 "+done+"/"+totalTiles+" …");
+    }
+    if(streaming){
+      await writer.close();await reading;
+      parts.push(chunk("IEND",new Uint8Array(0)));
+      saveBlob(new Blob(parts,{type:"image/png"}),fileName(pw,phTotal));
+      setMsg("完成："+pw+"×"+phTotal+" px PNG 已导出");
+    }else{
+      setMsg("完成：当前浏览器不支持流式编码，已分片导出 "+totalTiles+" 张 PNG");
+    }
+  }catch(e){
+    console.error(e);setMsg("导出失败："+(e&&e.message||e));
+  }finally{
+    running=false;go.disabled=false;
+    setTimeout(function(){bar.style.display="none";},2000);
+  }
+}
+
+function fileName(w,h,part,total){
+  var d=(document.title.split("·")[1]||"").trim().replace(/[年月]/g,"-").replace(/日/g,"").replace(/\s/g,"");
+  var base="AI资讯周刊"+(d?"_"+d:"")+"_"+w+"x"+h;
+  return part?base+"_part"+part+"of"+total+".png":base+".png";
+}
+function saveBlob(blob,name){
+  if(window.__longImgSave){window.__longImgSave(blob,name);return;}   /* 测试钩子 */
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},120000);
+}
+window.__exportLongImage=exportLongImage;   /* 供调试/测试 */
+})();
+</script>
+<!-- EXPORT-LONG-IMG END -->
+
 </body>
 </html>
