@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 资讯周刊 · 2026年10月12日</title>
+<style>
+  :root {
+    --paper: #f4f1e9; --paper2: #ece8dd; --ink: #1d1b16; --ink2: #4c473c; --ink3: #8d8674;
+    --rule: #c9c3b2; --rule-dark: #2a2721; --accent: #b03a2e; --accent-soft: #c05a4e;
+    --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #16151a; --paper2: #1e1d24; --ink: #e8e4d8; --ink2: #b3ad9e; --ink3: #7b7566;
+      --rule: #3a382f; --rule-dark: #d8d3c4; --accent: #d4604f; --accent-soft: #e08070;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 15.5px; line-height: 1.9;
+    padding: 40px 18px 72px;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; }
+
+  /* ═══ 刊头 ═══ */
+  .mast-kicker {
+    text-align: center; font-size: 12px; letter-spacing: .5em; text-indent: .5em;
+    color: var(--ink3); margin-bottom: 14px;
+  }
+  .mast-title {
+    font-family: var(--serif); font-weight: 900; text-align: center;
+    font-size: 52px; letter-spacing: .08em; line-height: 1.2;
+  }
+  .mast-sub {
+    text-align: center; font-size: 13px; color: var(--ink3);
+    letter-spacing: .3em; text-indent: .3em; margin-top: 8px;
+  }
+  .mast-rule { border: 0; border-top: 1px solid var(--rule-dark); margin: 18px 0 0; }
+  .mast-rule.thick { border-top: 3px double var(--rule-dark); margin-top: 4px; }
+  .mast-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 4px; font-size: 12.5px; color: var(--ink2);
+    letter-spacing: .12em; border-bottom: 1px solid var(--rule-dark); margin-bottom: 8px;
+  }
+  .mast-meta .mid { font-family: var(--serif); font-size: 14px; color: var(--ink); letter-spacing: .2em; }
+
+  /* ═══ 栏目题花 ═══ */
+  section { margin-top: 44px; display: grid; grid-template-columns: repeat(6, 1fr); column-gap: 28px; }
+  .sec-title {
+    grid-column: 1 / -1; display: flex; align-items: baseline; gap: 14px;
+    border-top: 1px solid var(--rule-dark); padding-top: 12px; margin-bottom: 20px;
+  }
+  .sec-title .bar {
+    font-family: var(--serif); font-weight: 900; font-size: 26px; color: var(--accent);
+    line-height: 1; min-width: 40px;
+  }
+  .sec-title .name { font-family: var(--serif); font-weight: 900; font-size: 24px; letter-spacing: .1em; }
+  .sec-title .en { font-size: 11px; letter-spacing: .3em; color: var(--ink3); margin-left: auto; }
+
+  /* ═══ 头条（封面故事） ═══ */
+  .headline { grid-column: 1 / -1; padding-bottom: 22px; margin-bottom: 22px; border-bottom: 1px solid var(--rule); }
+  .headline .rank {
+    display: inline-block; font-family: var(--serif); font-size: 13px; color: var(--accent);
+    border: 1.5px solid var(--accent); border-radius: 50%; width: 26px; height: 26px;
+    text-align: center; line-height: 23px; margin-bottom: 10px; font-weight: 700;
+  }
+  .headline h3 { font-family: var(--serif); font-weight: 900; font-size: 20px; line-height: 1.6; margin-bottom: 10px; letter-spacing: .02em; }
+  .headline p { color: var(--ink2); font-size: 14.5px; }
+  /* 第一条：封面特稿 */
+  .headline:first-of-type { text-align: left; border-bottom: 1px solid var(--rule-dark); }
+  .headline:first-of-type .rank { width: 30px; height: 30px; line-height: 27px; font-size: 15px; }
+  .headline:first-of-type h3 { font-size: 32px; line-height: 1.45; }
+  .headline:first-of-type p { column-count: 3; column-gap: 32px; column-rule: 1px solid var(--rule); font-size: 14.5px; }
+  .headline:first-of-type p::first-letter {
+    font-family: var(--serif); font-size: 3.1em; font-weight: 900; float: left;
+    line-height: .85; padding: 4px 10px 0 0; color: var(--accent);
+  }
+  /* 第二三条并排（半栏） */
+  .headline:not(:first-of-type) { grid-column: span 3; border-bottom: 1px solid var(--rule); }
+
+  /* ═══ 简报条目（一行三列） ═══ */
+  .item { grid-column: span 2; padding: 0 0 16px; margin-bottom: 16px; border-bottom: 1px solid var(--rule); break-inside: avoid; }
+  .item h4 { font-family: var(--serif); font-weight: 900; font-size: 17px; line-height: 1.6; margin-bottom: 6px; }
+  .item h4::before { content: "▪"; color: var(--accent); margin-right: 8px; font-size: 13px; vertical-align: 2px; }
+  .item p { color: var(--ink2); font-size: 14px; }
+
+  /* ═══ 来源 ═══ */
+  .src { margin-top: 8px; font-size: 11.5px; letter-spacing: .1em; color: var(--ink3); }
+  .src::before { content: "来源 · "; }
+  .src a { color: var(--accent); text-decoration: none; margin-right: 10px; border-bottom: 1px solid transparent; }
+  .src a:hover { border-bottom-color: var(--accent); }
+
+  /* ═══ X 热帖（场外声音·引语体，一行三列） ═══ */
+  .xpost {
+    grid-column: span 2;
+    padding: 0 0 18px; margin-bottom: 18px; border-bottom: 1px solid var(--rule); break-inside: avoid;
+    position: relative; padding-left: 34px;
+  }
+  .xpost::before {
+    content: "“"; position: absolute; left: 0; top: -4px;
+    font-family: var(--serif); font-size: 42px; font-weight: 900; color: var(--accent); line-height: 1;
+  }
+  .xpost .xhead { font-family: var(--serif); font-weight: 900; font-size: 15px; margin-bottom: 4px; }
+  .xpost .xhead::after { content: " · X"; font-family: var(--sans); font-size: 11px; color: var(--ink3); font-weight: 400; letter-spacing: .1em; }
+  .xpost p { color: var(--ink2); font-size: 14px; }
+  .metrics { display: flex; gap: 16px; margin-top: 8px; font-size: 11.5px; letter-spacing: .08em; color: var(--ink3); flex-wrap: wrap; }
+  .metrics a { color: var(--accent); text-decoration: none; }
+
+  /* ═══ 编辑注（覆盖缺口） ═══ */
+  .gap {
+    grid-column: 1 / -1; border-left: 3px solid var(--ink3); background: var(--paper2);
+    padding: 14px 20px; font-size: 13px; color: var(--ink2); line-height: 1.9;
+  }
+  .gap::before { content: "编辑注 · "; font-weight: 700; color: var(--ink); letter-spacing: .1em; }
+
+  /* ═══ 版权页 ═══ */
+  footer { margin-top: 52px; text-align: center; font-size: 12px; color: var(--ink3); line-height: 2.1; }
+  footer .colophon-rule { border: 0; border-top: 3px double var(--rule-dark); margin-bottom: 18px; }
+  footer .mast-mini { font-family: var(--serif); font-weight: 900; font-size: 16px; color: var(--ink); letter-spacing: .2em; }
+  footer .srcs { max-width: 640px; margin: 6px auto 0; }
+
+  @media (max-width: 900px) {
+    .item, .xpost { grid-column: span 3; }
+    .headline:first-of-type p { column-count: 2; }
+  }
+  @media (max-width: 640px) {
+    body { padding: 28px 14px 56px; }
+    .mast-title { font-size: 36px; }
+    .item, .xpost, .headline:not(:first-of-type) { grid-column: 1 / -1; }
+    .headline:first-of-type h3 { font-size: 24px; }
+    .headline:first-of-type p { column-count: 1; }
+    .mast-meta { flex-direction: column; gap: 4px; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .gap { background: #f5f5f5; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ═══ 刊头 ═══ -->
+  <div class="mast-kicker">WEEKLY AI DIGEST · EST. 2026</div>
+  <div class="mast-title">AI 资讯周刊</div>
+  <div class="mast-sub">模 型 · 工 具 · 医 疗 · 行 业 · 声 音</div>
+  <hr class="mast-rule">
+  <hr class="mast-rule thick">
+  <div class="mast-meta">
+    <span>2026年10月12日</span>
+    <span class="mid">统计窗口 10月5日 — 10月12日</span>
+    <span>每周一 · 自动编辑出版</span>
+  </div>
+
+  <!-- 🔥 头条 -->
+  <section>
+    <div class="sec-title"><span class="bar">壹</span><span class="name">本周头条</span><span class="en">COVER STORIES</span></div>
+    <div class="headline"><div class="rank">1</div><div><h3>Mistral Large 4「Le Chonk」：欧洲首个万亿参数开放权重旗舰横空出世</h3><p>10 月 6 日，Mistral AI 发布旗舰模型 Mistral Large 4（官方昵称 Le Chonk）：1.05 万亿参数 granular MoE、每 token 激活 49B、原生多模态、100 万 token 上下文，从零训练于欧洲自有数据中心的 3800 块 Grace Blackwell GPU。API 已上线（$1.36/$4.18 每百万 token），权重承诺月底前开放，是欧美阵营迄今为止最强的开放权重模型。其最亮眼的标签是网络安全：Cybench 93%、漏洞复现修补 82%，在 Artificial Analysis 网络指数中领跑所有非中国开放模型。HN 讨论热度超 2000 分，本周毫无争议的头条。</p><div class="src"><a href="https://mistral.ai/news/mistral-large-4/">Mistral AI 官方</a></div></div></div>
+    <div class="headline"><div class="rank">2</div><div><h3>Claude Haiku 5.5 发布：小模型价格战打到「骨折」</h3><p>Anthropic 推出 Haiku 5.5：1M 上下文、128K 输出，定价 $0.10/$0.50 每百万 token，运行成本平均比 Haiku 4.5 低 75%，直接对标 GPT-6 Luna，并已成为 API 默认 Haiku 与 Claude Code 默认小模型。智能分大涨 26 点（Artificial Analysis 43 分），还首次为 Haiku 级引入可调 effort 档位。小模型正式卷入「既要便宜又要聪明」的绞杀战。</p><div class="src"><a href="https://www.anthropic.com/claude-haiku-5-5">Anthropic 官方</a><a href="https://simonwillison.net/2026/Oct/7/claude-haiku-5-5/">Simon Willison</a></div></div></div>
+    <div class="headline"><div class="rank">3</div><div><h3>OpenAI 数学「手稿风暴」：722 篇前沿成果发布，随后撤回 3 项</h3><p>OpenAI 公开内部前沿模型在数学开放问题上的进展：一次性放出 722 篇手稿，包括将王虹攻下的三维挂谷猜想扩展到四维的 175 页证明稿，并开源 Lean 形式化。数日后官方更新 GitHub 仓库：新增 6 项形式化、修改 19 处、撤回 3 项结果，约 42% 顶线成果完成形式化。数学界反应两极——有人称之为「数学末日」，有人肯定其透明纠错。HN 双帖合计近 2000 分。</p><div class="src"><a href="https://openai.com/index/sharing-ai-progress-in-mathematics">OpenAI 官方</a><a href="https://github.com/openai/math/blob/main/history.md">GitHub 更正记录</a></div></div></div>
+  </section>
+
+  <!-- 🚀 模型与研究（合并：模型与产品 + 研究与评测） -->
+  <section>
+    <div class="sec-title"><span class="bar">贰</span><span class="name">模型与研究</span><span class="en">MODELS &amp; RESEARCH</span></div>
+    <div class="item model"><h4>GPT-6 全球推送，Intelligent UI 登场</h4><p>GPT-6 在 ChatGPT 全面上线，新 IUI 智能界面把可视化、可交互元素直接嵌入回答——模型竞争从「分数」卷到「形态」。</p><div class="src"><a href="https://openai.com/index/gpt-6-for-everyone">OpenAI 官方</a></div></div>
+    <div class="item model"><h4>Reflection 发布 501B 开放权重模型 Beam</h4><p>Reflection AI 首个开放权重旗舰，501B 参数、宣称训练算力仅为同级 1/4，开放权重阵营再添重炮。</p><div class="src"><a href="https://reflection.ai/blog/introducing-beam">Reflection AI</a></div></div>
+    <div class="item model"><h4>谷歌开源 EmbeddingGemma 2</h4><p>轻量多模态嵌入模型，端侧 RAG 与检索场景的低成本新选择，HN 热度 436 分。</p><div class="src"><a href="https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model/">Google DeepMind</a></div></div>
+    <div class="item research"><h4>Claude 发现全新酶系统</h4><p>Anthropic 披露 Claude 辅助科学家发现此前未知的酶系统，AI for Science 从「加速文献综述」迈进「产出新发现」。</p><div class="src"><a href="https://www.anthropic.com/news/claude-discovers-novel-enzyme-system">Anthropic 官方</a></div></div>
+    <div class="item research"><h4>多 Agent 协作基准：最强模型组队也只完成 50% 任务</h4><p>新基准评测显示单体再强也不会「打团」，Agent 协作能力成为下一道分水岭。</p><div class="src"><a href="https://aiera.com.cn/2026/10/11/other/admin/118040/agent%e7%bb%84%e9%98%9f%e5%b9%b2%e6%b4%bb%ef%bc%8c%e6%9c%80%e5%bc%ba%e6%a8%a1%e5%9e%8b%e5%8f%aa%e5%ae%8c%e6%88%9050%e4%bb%bb%e5%8a%a1%ef%bc%81%e5%9f%ba%e5%87%86%e8%af%84%e6%b5%8b%e5%8d%8f%e4%bd%9c/">新智元</a></div></div>
+  </section>
+
+  <!-- 🛠️ Coding 工具 -->
+  <section>
+    <div class="sec-title"><span class="bar">叁</span><span class="name">Coding 工具</span><span class="en">CODING TOOLS</span></div>
+    <div class="item tool"><h4>Claude Code v2.1.296</h4><p>本周重点：v2.1.293 起默认小模型切换为 Haiku 5.5（1M 上下文），v2.1.295 新增 <code>onFailure: "block"</code> 让钩子故障直接阻断动作，最新版再把 managed.policies 扩展到 Claude Desktop 的 Code 标签页。</p><div class="src"><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.296">GitHub Releases</a></div></div>
+    <div class="item tool"><h4>Codex v0.163.0-alpha.5</h4><p>0.163 alpha 系列本周连发四版，稳定通道 v0.162.1 修复了多行异步提问导致的 TUI 崩溃；同期 OpenAI「dots」24 小时在线 Agent 登陆手机端，可直接开口指挥 Codex 干活。</p><div class="src"><a href="https://github.com/openai/codex/releases/tag/rust-v0.163.0-alpha.5">GitHub Releases</a><a href="https://aiera.com.cn/2026/10/11/other/admin/118075/%e7%aa%81%e5%8f%91%ef%bc%81openai-dots%e5%85%a8%e9%9d%a2%e7%99%bb%e9%99%86%e6%89%8b%e6%9c%ba%ef%bc%8c%e5%bc%80%e5%8f%a3%e6%8c%87%e6%8c%a5codex%e5%b9%b2%e6%b4%bb%e4%ba%86/">新智元</a></div></div>
+    <div class="item tool"><h4>OpenCode v1.19.0</h4><p>支持 OpenAI 新的 ultrafast 服务档位，并为 OpenCode 2 大版本升级铺路（upgrade --major）。</p><div class="src"><a href="https://github.com/anomalyco/opencode/releases/tag/v1.19.0">GitHub Releases</a></div></div>
+    <div class="item tool"><h4>Pi Agent v1.1.0</h4><p>引入 OSC 7501 程序状态上报：终端与 Agent 仪表盘可实时看到 Pi 是在工作、等待确认、完成还是失败——人机协作的「红绿灯」。</p><div class="src"><a href="https://github.com/earendil-works/pi/releases/tag/v1.1.0">GitHub Releases</a></div></div>
+  </section>
+
+  <!-- 🏥 AI 医疗 -->
+  <section>
+    <div class="sec-title"><span class="bar">肆</span><span class="name">AI 医疗</span><span class="en">AI IN MEDICINE</span></div>
+    <div class="item medical"><h4>VOICE-AE：环境临床音频自动完成不良事件评分</h4><p>语音识别 + LLM 从诊室环境音中直接生成 CTCAE 不良事件分级，肿瘤随访文书负担有望大幅减轻。</p><div class="src"><a href="https://www.nature.com/articles/s41746-026-03373-z">npj Digital Medicine</a></div></div>
+    <div class="item medical"><h4>FHIR-AgentEval：临床 LLM Agent 的模块化评测沙盒</h4><p>基于 FHIR 标准、支持记忆增强配置的临床 Agent 基准框架，为「医疗 Agent 能不能上岗」提供可复现的度量尺。</p><div class="src"><a href="https://www.nature.com/articles/s41746-026-03348-0">npj Digital Medicine</a></div></div>
+    <div class="item medical"><h4>Abridge 与德州大学系统达成企业级合作</h4><p>AI 临床文书覆盖 UT 系统全部 8 家医疗机构，是环境聆听类 AI 迄今为止最大规模的体系化落地之一。</p><div class="src"><a href="https://www.fiercehealthcare.com/ai-and-machine-learning/abridge-university-texas-system-enter-enterprise-wide-agreement-expanded-ai">Fierce Healthcare</a></div></div>
+  </section>
+
+  <!-- 🏢 行业与商业 -->
+  <section>
+    <div class="sec-title"><span class="bar">伍</span><span class="name">行业与商业</span><span class="en">INDUSTRY &amp; BUSINESS</span></div>
+    <div class="item biz"><h4>OpenAI 年化营收口径「打架」，差了 200 亿美元</h4><p>FT/CNBC 披露其向投资者提供的文件与对外口径存在约 200 亿美元差距，消息当日英伟达跌近 3%，市场对 AI 资本开支链的敏感度可见一斑。</p><div class="src"><a href="https://www.cnbc.com/2026/10/08/open-ai-revenue-nvidia-oracle-coreweave.html">CNBC</a><a href="https://aiera.com.cn/2026/10/11/other/admin/118052/%e5%b7%ae%e4%ba%86200%e4%ba%bf%e7%be%8e%e5%85%83%ef%bc%81openai%e5%b9%b4%e5%8c%96%e8%90%a5%e6%94%b6%e6%95%b0%e5%ad%97%e6%89%93%e6%9e%b6%ef%bc%8c%e8%8b%b1%e4%bc%9f%e8%be%be%e8%b7%8c%e8%bf%913/">新智元</a></div></div>
+    <div class="item biz"><h4>AI 与司法系统碰撞的一周</h4><p>Anthropic 被曝将用户「日记」内容举报给警方、致当事人面临重罪指控，Claude 又被指向警方提交费城悬案的虚假线索；同期 OpenAI 解雇三名安全研究员引发「寒蝉效应」争议——模型进入现实世界后的责任边界亟待回答。</p><div class="src"><a href="https://www.techspot.com/news/114091-florida-woman-used-claude-diary-anthropic-reported-shoot.html">TechSpot</a><a href="https://techcrunch.com/2026/10/08/fired-openai-safety-researchers-dispute-misconduct-claims-warn-of-chilling-effect/">TechCrunch</a></div></div>
+    <div class="item biz"><h4>「决策模型」成为新赛道，价格战同步开打</h4><p>前 OpenAI 员工的 TypeSafe AI（决策模型 JEV）A 轮融资 8.7 亿美元、估值 75 亿；微软同日发布基于 Qwen 后训练的 Decision-1；Cloudflare 则让 Clef 降价提速并推出多模态 Clef-omni——不给文本、只给结构化概率的模型开始被资本重估。</p><div class="src"><a href="https://aiera.com.cn/2026/10/11/other/admin/117943/%e5%89%8dopenai%e5%91%98%e5%b7%a5%e5%81%9a%e5%87%ba%e4%b8%8d%e4%bc%9a%e8%81%8a%e5%a4%a9%e7%9a%84ai%ef%bc%81%e5%88%9a%e8%9e%8d8-7%e4%ba%bf%e7%be%8e%e5%85%83%ef%bc%8c%e4%b8%8a%e7%ba%bf%e4%b8%a4%e5%91%a8/">新智元</a><a href="https://www.oschina.net/news/502942/microsoft-decision-1-model-foundry">开源中国</a></div></div>
+  </section>
+
+  <!-- 🐦 X 热帖 -->
+  <section>
+    <div class="sec-title"><span class="bar">陆</span><span class="name">场外声音</span><span class="en">VOICES FROM X</span></div>
+    <div class="xpost"><div class="xhead">@karpathy</div><p>人们对 LLM 能力的共识鸿沟正在急剧扩大：75% 的人几乎没接触过 LLM，20% 把它当「更好的搜索」，仅 0.2% 的专业用户亲历 Agent 把数周项目压缩成一句提示词，而最顶端约 5000 人已在内部见证数千 Agent 协作数周攻下软件巨型工程与数学前沿——「认知漏斗」越来越尖。</p><div class="metrics"><span>👍 2.26万</span><span>🔖 1.56万</span><span>👁 205.8万</span><span><a href="https://x.com/karpathy/status/2109361546505966046">原文</a></span></div></div>
+    <div class="xpost"><div class="xhead">@danintheory（OpenAI 科学家 Dan Roberts）</div><p>官方回应数学手稿风波：GitHub 仓库新增 6 项 Lean 形式化、修改 19 处、撤回 3 项，约 42% 顶线成果已形式化，「将持续更新并勘误」。透明纠错姿态为 OpenAI 扳回部分口碑。</p><div class="metrics"><span>👍 1806</span><span>🔖 351</span><span>👁 53.7万</span><span><a href="https://x.com/danintheory/status/2108065033070789090">原文</a></span></div></div>
+    <div class="xpost"><div class="xhead">@synthwavedd</div><p>对 Mistral Large 4 的毒舌点评意外走红：「它真正领跑的似乎是一个关于法规的基准——又一个欧盟风味爆款。」调侃背后是欧洲模型「合规强、通用能力待验证」的普遍观感。</p><div class="metrics"><span>👍 7005</span><span>🔖 360</span><span>👁 17.0万</span><span><a href="https://x.com/synthwavedd/status/2107463923205079480">原文</a></span></div></div>
+  </section>
+
+  <!-- ⚠️ 覆盖缺口 -->
+  
+
+  <footer>
+    <hr class="colophon-rule">
+    <div class="mast-mini">AI 资讯周刊</div>
+    <div>本刊每周一 08:00 自动编辑出版 · 生成时间 2026-10-12 10:30 CST</div>
+    <div class="srcs">信息源：OpenAI / Anthropic / Google DeepMind / Mistral 官方博客 · Simon Willison / Interconnects / Import AI / The Batch · npj Digital Medicine / STAT News / Fierce Healthcare / The Medical Futurist · 量子位 / 新智元 / 雷峰网 / InfoQ 中文 / 极客公园 / 爱范儿 / 少数派 / 钛媒体 / 开源中国 / Solidot · Hacker News · X</div>
+  </footer>
+
+</div>
+<!-- EXPORT-LONG-IMG BEGIN -->
+<style>
+.export-ui{position:fixed;right:18px;bottom:18px;z-index:9999;font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;text-align:right}
+.xbtn{padding:9px 16px;background:#f4f1e9;color:#1d1b16;border:1px solid #2a2721;box-shadow:2px 2px 0 #2a2721;font-size:13px;letter-spacing:.15em;cursor:pointer}
+.xbtn:hover{background:#ece8dd}
+.xpanel{display:none;margin-bottom:8px;width:250px;background:#f4f1e9;border:1px solid #2a2721;box-shadow:2px 2px 0 #2a2721;padding:14px 16px;font-size:12.5px;color:#4c473c;line-height:2;text-align:left}
+.xpanel.open{display:block}
+.xpanel h5{font-size:13px;letter-spacing:.25em;margin-bottom:4px;color:#1d1b16}
+.xpanel label{display:block;cursor:pointer;white-space:nowrap}
+.xpanel input{vertical-align:-1px}
+.xgo{width:100%;margin-top:8px;padding:7px 0;background:#b03a2e;color:#f4f1e9;border:1px solid #2a2721;cursor:pointer;font-size:13px;letter-spacing:.25em}
+.xgo:disabled{opacity:.5;cursor:default}
+.xbar{height:6px;border:1px solid #2a2721;margin-top:10px;display:none}
+.xbar i{display:block;height:100%;width:0;background:#b03a2e}
+.xmsg{margin-top:6px;font-size:11.5px;min-height:1.2em;word-break:break-all}
+@media (prefers-color-scheme:dark){.xbtn,.xpanel{background:#1e1d24;color:#e8e4d8;border-color:#d8d3c4;box-shadow:2px 2px 0 #000}.xpanel h5{color:#e8e4d8}.xgo{background:#d4604f;color:#16151a}.xbar{border-color:#d8d3c4}.xbar i{background:#d4604f}}
+@media print{.export-ui{display:none}}
+</style>
+<div class="export-ui" data-export-ignore>
+  <div class="xpanel" id="xpanel">
+    <h5>导出长图</h5>
+    <label><input type="radio" name="xscale" value="2"> 高清 2× · 宽 2552px</label>
+    <label><input type="radio" name="xscale" value="3" checked> 超清 3× · 宽 3828px</label>
+    <label><input type="radio" name="xscale" value="4"> 极限 4× · 宽 5104px</label>
+    <button class="xgo" id="xgo">开始导出</button>
+    <div class="xbar" id="xbar"><i></i></div>
+    <div class="xmsg" id="xmsg"></div>
+  </div>
+  <button class="xbtn" id="xtoggle">⤓ 导出长图</button>
+</div>
+<script>
+(function(){
+"use strict";
+var EXPORT_W=1276;          /* 排版宽度：1240 栏宽 + 左右各 18px 页边 */
+var TILE_PX=2048;           /* 单片画布最大像素高（控制内存峰值） */
+var PAPER="#f4f1e9";
+var LIGHT=":root{--paper:#f4f1e9;--paper2:#ece8dd;--ink:#1d1b16;--ink2:#4c473c;--ink3:#8d8674;--rule:#c9c3b2;--rule-dark:#2a2721;--accent:#b03a2e;--accent-soft:#c05a4e;}html{overflow:hidden}";
+var panel=document.getElementById("xpanel"),bar=document.getElementById("xbar"),
+    barI=bar.querySelector("i"),msg=document.getElementById("xmsg"),
+    go=document.getElementById("xgo"),running=false;
+
+document.getElementById("xtoggle").addEventListener("click",function(){panel.classList.toggle("open");});
+go.addEventListener("click",function(){
+  if(running)return;
+  var s=parseInt(panel.querySelector("input[name=xscale]:checked").value,10);
+  exportLongImage(s);
+});
+
+function setMsg(t){msg.textContent=t;}
+function setBar(p){bar.style.display="block";barI.style.width=Math.round(p*100)+"%";}
+
+function buildXHTML(){
+  var root=document.documentElement.cloneNode(true);
+  root.setAttribute("xmlns","http://www.w3.org/1999/xhtml");
+  Array.prototype.forEach.call(root.querySelectorAll("[data-export-ignore],script"),function(n){n.parentNode.removeChild(n);});
+  var st=document.createElement("style");st.textContent=LIGHT;   /* 长图固定为浅色纸张版 */
+  root.querySelector("head").appendChild(st);
+  return new XMLSerializer().serializeToString(root);
+}
+
+function measure(xhtml){
+  return new Promise(function(res,rej){
+    var f=document.createElement("iframe");
+    f.style.cssText="position:fixed;left:-100000px;top:0;width:"+EXPORT_W+"px;height:1000px;border:0;visibility:hidden;";
+    document.body.appendChild(f);
+    f.onload=function(){
+      var done=function(){res({frame:f,h:f.contentDocument.documentElement.scrollHeight});};
+      try{(f.contentDocument.fonts?f.contentDocument.fonts.ready:Promise.resolve()).then(function(){setTimeout(done,150);});}
+      catch(e){setTimeout(done,150);}
+    };
+    f.onerror=rej;
+    f.contentDocument.open();f.contentDocument.write(xhtml);f.contentDocument.close();
+  });
+}
+
+function tileSVG(xhtml,th,offY,pw,ph){
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+pw+'" height="'+ph+'" viewBox="0 0 '+EXPORT_W+' '+th+'">'
+    +'<foreignObject x="0" y="0" width="'+EXPORT_W+'" height="'+th+'">'
+    +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+EXPORT_W+'px;height:'+th+'px;overflow:hidden;">'
+    +'<div style="margin-top:-'+offY+'px;">'
+    +xhtml
+    +'</div></div></foreignObject></svg>';
+}
+
+function rasterTile(xhtml,th,offY,scale){
+  var pw=EXPORT_W*scale, ph=th*scale;
+  return new Promise(function(res,rej){
+    var img=new Image();
+    img.onload=function(){
+      var c=document.createElement("canvas");c.width=pw;c.height=ph;
+      var ctx=c.getContext("2d");
+      ctx.fillStyle=PAPER;ctx.fillRect(0,0,pw,ph);
+      ctx.drawImage(img,0,0,pw,ph);
+      res({canvas:c,ctx:ctx,pw:pw,ph:ph});
+    };
+    img.onerror=function(){rej(new Error("SVG 分片渲染失败"));};
+    img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(tileSVG(xhtml,th,offY,pw,ph));
+  });
+}
+
+/* ── PNG 流式编码（突破单画布像素上限，可输出任意长度长图） ── */
+var CRC_T=(function(){var t=new Uint32Array(256),i,j,c;for(i=0;i<256;i++){c=i;for(j=0;j<8;j++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[i]=c>>>0;}return t;})();
+function crc32(b){var c=4294967295,i;for(i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^4294967295)>>>0;}
+function chunk(type,data){
+  var out=new Uint8Array(12+data.length),dv=new DataView(out.buffer),i;
+  dv.setUint32(0,data.length);
+  for(i=0;i<4;i++)out[4+i]=type.charCodeAt(i);
+  out.set(data,8);
+  dv.setUint32(8+data.length,crc32(out.subarray(4,8+data.length)));
+  return out;
+}
+function pngHead(pw,ph){
+  var ihdr=new Uint8Array(13),dv=new DataView(ihdr.buffer);
+  dv.setUint32(0,pw);dv.setUint32(4,ph);ihdr[8]=8;ihdr[9]=6;
+  return [new Uint8Array([137,80,78,71,13,10,26,10]),chunk("IHDR",ihdr)];
+}
+
+async function exportLongImage(scale){
+  running=true;go.disabled=true;setBar(0);
+  try{
+    setMsg("正在测量版面…");
+    var xhtml=buildXHTML();
+    var m=await measure(xhtml);
+    var H=m.h+16;                       /* 底部留 16px 余量防裁切 */
+    document.body.removeChild(m.frame);
+    var pw=EXPORT_W*scale, phTotal=H*scale;
+    var thCss=Math.floor(TILE_PX/scale), totalTiles=Math.ceil(H/thCss);
+    setMsg("目标 "+pw+"×"+phTotal+" px · 共 "+totalTiles+" 个分片");
+    var streaming=!!window.CompressionStream;
+    var parts=null,writer=null,reading=null;
+    if(streaming){
+      parts=pngHead(pw,phTotal);
+      var cs=new CompressionStream("deflate");
+      writer=cs.writable.getWriter();
+      var reader=cs.readable.getReader();
+      reading=(async function(){for(;;){var r=await reader.read();if(r.done)break;parts.push(chunk("IDAT",r.value));}})();
+    }
+    var off=0,done=0;
+    while(off<H){
+      var th=Math.min(thCss,H-off);
+      var t=await rasterTile(xhtml,th,off,scale);
+      if(streaming){
+        var raw=t.ctx.getImageData(0,0,t.pw,t.ph).data;
+        var rowB=t.pw*4, out=new Uint8Array(raw.length+t.ph), y;
+        for(y=0;y<t.ph;y++)out.set(raw.subarray(y*rowB,(y+1)*rowB),y*(rowB+1)+1);
+        await writer.write(out);
+        t.canvas.width=0;               /* 立即释放画布内存 */
+      }else{
+        var blob=await new Promise(function(r){t.canvas.toBlob(r,"image/png");});
+        saveBlob(blob,fileName(t.pw,t.ph,done+1,totalTiles));
+      }
+      off+=th;done++;setBar(done/totalTiles);
+      setMsg("渲染分片 "+done+"/"+totalTiles+" …");
+    }
+    if(streaming){
+      await writer.close();await reading;
+      parts.push(chunk("IEND",new Uint8Array(0)));
+      saveBlob(new Blob(parts,{type:"image/png"}),fileName(pw,phTotal));
+      setMsg("完成："+pw+"×"+phTotal+" px PNG 已导出");
+    }else{
+      setMsg("完成：当前浏览器不支持流式编码，已分片导出 "+totalTiles+" 张 PNG");
+    }
+  }catch(e){
+    console.error(e);setMsg("导出失败："+(e&&e.message||e));
+  }finally{
+    running=false;go.disabled=false;
+    setTimeout(function(){bar.style.display="none";},2000);
+  }
+}
+
+function fileName(w,h,part,total){
+  var d=(document.title.split("·")[1]||"").trim().replace(/[年月]/g,"-").replace(/日/g,"").replace(/\s/g,"");
+  var base="AI资讯周刊"+(d?"_"+d:"")+"_"+w+"x"+h;
+  return part?base+"_part"+part+"of"+total+".png":base+".png";
+}
+function saveBlob(blob,name){
+  if(window.__longImgSave){window.__longImgSave(blob,name);return;}   /* 测试钩子 */
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},120000);
+}
+window.__exportLongImage=exportLongImage;   /* 供调试/测试 */
+})();
+</script>
+<!-- EXPORT-LONG-IMG END -->
+
+</body>
+</html>
